@@ -1,0 +1,17 @@
+1d9f37dbb6d6a3729f4a092ff03ddd19 *DESCRIPTION
+dc21c19f0d6968ee25d441b2cf46017d *NAMESPACE
+dd101544e548e8563c1a573a2ab6e5c2 *NEWS.md
+bcda9e65295f200ea2aa96e46aee3883 *R/rgen-package.R
+f377ab142fd4af0f0d5fed7e8be029a3 *README.md
+30c36f3dd15fb1fbc5acc30c63011fb8 *build/vignette.rds
+8b4eab4584e99e44a3f48568e1c8818f *inst/doc/using-samplers.Rmd
+c6ca8f75581448450430de1c441a7d94 *inst/doc/using-samplers.html
+677dcfe5672bcce7f52cbc09e7ccc496 *inst/include/dist/rdirichlet.h
+ac8055db4939041390e56cceba37bf9b *inst/include/dist/riwishart.h
+bfa79f39bbb489501986d10d495bbf07 *inst/include/dist/rmatrixnorm.h
+8c01389cb08d32b545c90b1e951ccb23 *inst/include/dist/rmultinomial.h
+552c8195a5815d91f8bf20b50025fb1f *inst/include/dist/rmvnorm.h
+ca77a9a93ff42f550be7c8446d721d77 *inst/include/dist/rwishart.h
+20804b3476205f3bedd5be2050289e87 *inst/include/rgen.h
+8e6342cc6f29621e2590f243808066ee *man/rgen-package.Rd
+8b4eab4584e99e44a3f48568e1c8818f *vignettes/using-samplers.Rmd

@@ -1,0 +1,107 @@
+---
+title: "Using the rgen Samplers"
+author: "James Balamuta"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using the rgen Samplers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The purpose of the `rgen` package is to provide popular sampling distributions
+that are not exported by [_R_'s Math API](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Numerical-analysis-subroutines) or
+available in [_C++11_ and onwards](http://en.cppreference.com/w/cpp/numeric/random).
+These samplers are written using [armadillo](http://arma.sourceforge.net/docs.html).
+Please note, these samplers, just like the ones in [armadillo](http://arma.sourceforge.net/docs.html)
+**cannot** be used in parallelized code as the underlying generation routines
+rely upon _R_ calls that are single-threaded.
+
+## Installation of `rgen`
+
+`rgen` is available on CRAN and GitHub.
+
+To install the package, you must first have a compiler on your system that is compatible with R.
+
+For help on obtaining a compiler consult:
+
+-   [OS X](http://thecoatlessprofessor.com/programming/r-compiler-tools-for-rcpp-on-os-x/)
+-   [Windows](http://thecoatlessprofessor.com/programming/rcpp/install-rtools-for-rcpp/)
+
+With a compiler in hand, install the package from CRAN with:
+
+```r
+install.packages("rgen")
+```
+
+or from GitHub by:
+
+```r
+# install.packages("devtools")
+
+devtools::install_github("coatless/rgen")
+```
+
+## Using `rgen`
+
+There are two ways to use `rgen`. The first is to use `rgen` in a standalone
+script. The script is typically built using `sourceCpp()`. The second approach
+allows for `rgen` to be used within an R package.
+
+### Standalone file usage
+
+Within the `C++` file, the `rgen` package provides an Rcpp plugins' 
+depends statement that must be included after `rgen.h` header. This plugin
+statement indicates that a dependency is `rgen`.
+
+```cpp
+#include <RcppArmadillo.h> 
+// [[Rcpp::depends(RcppArmadillo)]]
+
+#include <rgen.h> 
+// [[Rcpp::depends(rgen)]]
+```
+
+**Note:** Since `rgen` relies upon `RcppArmadillo`, you must include
+the `RcppArmadillo.h` header _and_ include the traditional Rcpp dependency
+attribute, e.g. `// [[Rcpp::depends(RcppArmadillo)]]`.
+
+
+For example, the following would allow for you to sample from an inverse
+wishart distribution:
+
+```cpp
+#include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+
+#include <rgen.h>
+// [[Rcpp::depends(rgen)]]
+
+// Surface the riwishart function in the rgen package into R.
+// [[Rcpp::export]]
+arma::mat riwishart(unsigned int df, const arma::mat& S) {
+    return rgen::riwishart(df, S);
+}
+
+/*** R
+# Set seed for reproducibility
+set.seed(111)
+
+# Call the C++ function from R
+riwishart(3, diag(2))
+*/
+```
+
+### Package usage
+
+To use `rgen` in your R package, modify the `DESCRIPTION` file by adding:
+
+    LinkingTo: Rcpp, RcppArmadillo, rgen
+    Imports:
+        Rcpp (>= 0.12.10)
+
+To use `C++11`, you **may** wish to add the following 
+to your `src/Makevars` and `src/Makevars.win` file:
+
+    CXX_STD = CXX11
+    
